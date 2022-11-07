@@ -5,24 +5,17 @@ import (
 	"fmt"
 
 	_ "github.com/lib/pq"
-)
-
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "postgres"
-	dbname   = "postgres"
+	"github.com/rodiond26/gomigrator/config"
 )
 
 // NewDB .
-func NewDB() *sql.DB { // TODO fix
+func NewDB(cfg *config.Config) *sql.DB {
 	fmt.Println("Connecting to Postgres database...")
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	fmt.Println("psqlconn", psqlconn)
+	fmt.Printf(">>> cfg [%+v]\n", cfg)
+	dsn := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", cfg.Db["user"], cfg.Db["password"], cfg.Host, cfg.Port, cfg.Db["name"])
+	fmt.Println(">>> dsn = ", dsn)
 
-	// open database
-	db, err := sql.Open("postgres", psqlconn)
+	db, err := sql.Open("postgres", dsn)
 	if err != nil {
 		fmt.Println("Unable to connect to database 1", err.Error())
 		return nil
@@ -35,7 +28,6 @@ func NewDB() *sql.DB { // TODO fix
 	}
 
 	fmt.Println("Database connected!")
-
 	return db
 }
 

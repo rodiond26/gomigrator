@@ -56,15 +56,13 @@ func Init(db *sql.DB) (*Migrator, error) {
 	migrator.db = db
 
 	// Create `schema_migrations` table to remember which migrations were executed.
-	if _, err := db.Exec(`CREATE TABLE IF NOT EXISTS schema_migrations (
-		version varchar(255)
-	);`); err != nil {
+	if _, err := db.Exec("CREATE TABLE IF NOT EXISTS schema_migrations (version varchar(255));"); err != nil {
 		fmt.Println("Unable to create `schema_migrations` table", err)
 		return migrator, err
 	}
 
 	// Find out all the executed migrations
-	rows, err := db.Query("SELECT version FROM `schema_migrations`;")
+	rows, err := db.Query("SELECT version FROM schema_migrations;")
 	if err != nil {
 		return migrator, err
 	}

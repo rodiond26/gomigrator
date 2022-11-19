@@ -20,7 +20,7 @@ func NewDB(cfg *config.Config) *sql.DB {
 		fmt.Println("Unable to connect to database 1", err.Error())
 		return nil
 	}
-	defer db.Close()
+	// defer db.Close()
 
 	if err := db.Ping(); err != nil {
 		fmt.Println("Unable to connect to database 2", err.Error())

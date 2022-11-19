@@ -143,10 +143,12 @@ var statusCmd = &cobra.Command{
 		fmt.Printf(">>> status = [%+v]\n", c)
 
 		db := db.NewDB(c)
+		defer db.Close()
 
 		migrator, err := migrations.Init(db)
 		if err != nil {
 			fmt.Println("Unable to fetch migrator")
+			fmt.Printf(">>> err = [%+v]\n", err)
 			return
 		}
 
